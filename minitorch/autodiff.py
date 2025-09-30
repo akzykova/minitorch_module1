@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable, List, Tuple
 
 from typing_extensions import Protocol
+from collections import defaultdict
 
 # ## Task 1.1
 # Central Difference calculation
@@ -22,8 +23,13 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     Returns:
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
-    # TODO: Implement for Task 1.1.
-    raise NotImplementedError("Need to implement for Task 1.1")
+    delta_vals_plus = list(vals).copy()
+    delta_vals_plus[arg] += epsilon
+
+    delta_vals_minus = list(vals).copy()
+    delta_vals_minus[arg] -= epsilon
+
+    return (f(*delta_vals_plus) - f(*delta_vals_minus)) / (2 * epsilon)
 
 
 variable_count = 1
@@ -61,9 +67,22 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    order = []
+    visited = set()
 
+    def sort_func(node):
+        if node.unique_id in visited or node.is_constant():
+            return
+        
+        visited.add(node.unique_id)
+
+        for parent in node.parents:
+            sort_func(parent)
+
+        order.append(node)
+
+    sort_func(variable)
+    return order
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
     """
@@ -76,8 +95,25 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    order = topological_sort(variable)
+    grads = {}
+    grads[variable.unique_id] = deriv
+
+    for var in reversed(order):
+        if var.is_leaf():
+            continue
+            
+        curr_deriv = grads.get(var.unique_id, 0.0)
+
+        parent_deriv = var.chain_rule(curr_deriv)
+
+        for parent, parent_grad in parent_deriv:
+            if parent.is_leaf():
+                parent.accumulate_derivative(parent_grad)
+            else:
+                if parent.unique_id not in grads:
+                    grads[parent.unique_id] = 0.0
+                grads[parent.unique_id] += parent_grad
 
 
 @dataclass

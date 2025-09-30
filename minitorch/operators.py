@@ -11,100 +11,225 @@ from typing import Callable, Iterable
 
 
 def mul(x: float, y: float) -> float:
-    "$f(x, y) = x * y$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Return the product of two numbers.
+
+    Args:
+        x (float): First number.
+        y (float): Second number.
+
+    Returns:
+        float: The result of x * y.
+    """
+    return x * y
 
 
 def id(x: float) -> float:
-    "$f(x) = x$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Return the input value unchanged.
+
+    Args:
+        x (float): Input number.
+
+    Returns:
+        float: The same value as x.
+    """
+    return x
 
 
 def add(x: float, y: float) -> float:
-    "$f(x, y) = x + y$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Return the sum of two numbers.
+
+    Args:
+        x (float): First number.
+        y (float): Second number.
+
+    Returns:
+        float: The result of x + y.
+    """
+    return x + y
 
 
 def neg(x: float) -> float:
-    "$f(x) = -x$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Return the negation of a number.
 
+    Args:
+        x (float): Input number.
+
+    Returns:
+        float: The value -x.
+    """
+    return -1.0 * x
 
 def lt(x: float, y: float) -> float:
-    "$f(x) =$ 1.0 if x is less than y else 0.0"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Check if x is less than y.
+
+    Args:
+        x (float): First number.
+        y (float): Second number.
+
+    Returns:
+        float: 1.0 if x < y, otherwise 0.0.
+    """
+    return x < y
 
 
 def eq(x: float, y: float) -> float:
-    "$f(x) =$ 1.0 if x is equal to y else 0.0"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Check if two numbers are equal.
+
+    Args:
+        x (float): First number.
+        y (float): Second number.
+
+    Returns:
+        float: 1.0 if x == y, otherwise 0.0.
+    """
+    return x == y
 
 
 def max(x: float, y: float) -> float:
-    "$f(x) =$ x if x is greater than y else y"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Return the greater of two numbers.
+
+    Args:
+        x (float): First number.
+        y (float): Second number.
+
+    Returns:
+        float: The maximum of (x, y).
+    """
+    return x if x > y else y
 
 
 def is_close(x: float, y: float) -> float:
-    "$f(x) = |x - y| < 1e-2$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Check if two numbers are close within a tolerance of 1e-2.
+
+    Args:
+        x (float): First number.
+        y (float): Second number.
+
+    Returns:
+        float: 1.0 if |x - y| < 1e-2, otherwise 0.0.
+    """
+    return abs(x - y) < 1e-2
 
 
 def sigmoid(x: float) -> float:
-    r"""
-    $f(x) =  \frac{1.0}{(1.0 + e^{-x})}$
+    """Compute the sigmoid activation function.
 
-    (See https://en.wikipedia.org/wiki/Sigmoid_function )
+    The sigmoid function is defined as:
+        f(x) = 1 / (1 + exp(-x))
 
-    Calculate as
+    For numerical stability, it is computed as:
+        f(x) = 1 / (1 + exp(-x)) if x >= 0
+        f(x) = exp(x) / (1 + exp(x)) if x < 0
 
-    $f(x) =  \frac{1.0}{(1.0 + e^{-x})}$ if x >=0 else $\frac{e^x}{(1.0 + e^{x})}$
+    Args:
+        x (float): Input value.
 
-    for stability.
+    Returns:
+        float: The sigmoid of x.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    return 1 / (1 + math.exp(-x)) if x >= 0 else math.exp(x) / (1 + math.exp(x))
 
 
 def relu(x: float) -> float:
-    """
-    $f(x) =$ x if x is greater than 0, else 0
+    """Compute the ReLU activation function.
 
-    (See https://en.wikipedia.org/wiki/Rectifier_(neural_networks) .)
+    The ReLU function is defined as:
+        f(x) = x if x > 0 else 0
+
+    Args:
+        x (float): Input value.
+
+    Returns:
+        float: The ReLU of x.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    return x if x > 0 else 0.0
 
 
 EPS = 1e-6
 
 
 def log(x: float) -> float:
-    "$f(x) = log(x)$"
+    """Compute the natural logarithm with numerical stability.
+
+    Args:
+        x (float): Input value.
+
+    Returns:
+        float: log(x + EPS), where EPS is a small constant to avoid log(0).
+    """
     return math.log(x + EPS)
 
 
 def exp(x: float) -> float:
-    "$f(x) = e^{x}$"
+    """Compute the exponential function.
+
+    Args:
+        x (float): Input value.
+
+    Returns:
+        float: exp(x).
+    """
     return math.exp(x)
 
 
 def log_back(x: float, d: float) -> float:
-    r"If $f = log$ as above, compute $d \times f'(x)$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Compute the backward pass for the log function.
+
+    If f(x) = log(x), then f'(x) = 1 / x.
+    This function returns d * f'(x).
+
+    Args:
+        x (float): Input value.
+        d (float): Upstream gradient.
+
+    Returns:
+        float: Gradient with respect to x.
+    """
+    return (1 / x) * d
 
 
 def inv(x: float) -> float:
-    "$f(x) = 1/x$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Compute the reciprocal of a number.
+
+    Args:
+        x (float): Input value.
+
+    Returns:
+        float: 1 / x.
+    """
+    return 1 / x
 
 
 def inv_back(x: float, d: float) -> float:
-    r"If $f(x) = 1/x$ compute $d \times f'(x)$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Compute the backward pass for the inverse function.
+
+    If f(x) = 1 / x, then f'(x) = -1 / x².
+    This function returns d * f'(x).
+
+    Args:
+        x (float): Input value.
+        d (float): Upstream gradient.
+
+    Returns:
+        float: Gradient with respect to x.
+    """
+    return - (1 / x ** 2) * d
 
 
 def relu_back(x: float, d: float) -> float:
-    r"If $f = relu$ compute $d \times f'(x)$"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Compute the backward pass for the ReLU function.
+
+    If f(x) = ReLU(x), then f'(x) = 1 if x > 0, else 0.
+    This function returns d * f'(x).
+
+    Args:
+        x (float): Input value.
+        d (float): Upstream gradient.
+
+    Returns:
+        float: Gradient with respect to x.
+    """
+    return (x > 0) * d
 
 
 # ## Task 0.3
@@ -125,13 +250,22 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    return lambda lst: [fn(x) for x in lst]
 
 
 def negList(ls: Iterable[float]) -> Iterable[float]:
-    "Use `map` and `neg` to negate each element in `ls`"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Negate each element in a list.
 
+    Uses `map` together with the `neg` function.
+
+    Args:
+        ls (Iterable[float]): A list (or iterable) of numbers.
+
+    Returns:
+        Iterable[float]: A new iterable where each element is the negation of the corresponding element in ls.
+    """
+    mapper = map(neg)
+    return mapper(ls)
 
 def zipWith(
     fn: Callable[[float, float], float]
@@ -149,13 +283,23 @@ def zipWith(
          applying fn(x, y) on each pair of elements.
 
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    return lambda lst1, lst2: [fn(x, y) for x, y in zip(lst1, lst2)]
 
 
 def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
-    "Add the elements of `ls1` and `ls2` using `zipWith` and `add`"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Add corresponding elements of two lists.
 
+    Uses `zipWith` together with the `add` function.
+
+    Args:
+        ls1 (Iterable[float]): First list of numbers.
+        ls2 (Iterable[float]): Second list of numbers.
+
+    Returns:
+        Iterable[float]: A new iterable containing the elementwise sums of ls1 and ls2.
+    """
+    zipper = zipWith(add)
+    return zipper(ls1, ls2)
 
 def reduce(
     fn: Callable[[float, float], float], start: float
@@ -172,14 +316,40 @@ def reduce(
          $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
          fn(x_1, x_0)))`
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    def reducer(ls: Iterable[float]) -> float:
+        result = start
+        for x in ls:
+            result = fn(result, x)
+        return result
+    
+    return reducer
 
 
 def sum(ls: Iterable[float]) -> float:
-    "Sum up a list using `reduce` and `add`."
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Compute the sum of a list.
+
+    Uses `reduce` with the `add` function.
+
+    Args:
+        ls (Iterable[float]): A list (or iterable) of numbers.
+
+    Returns:
+        float: The sum of all elements in ls.
+    """
+    reducer = reduce(fn = add, start = 0)
+    return reducer(ls)
 
 
 def prod(ls: Iterable[float]) -> float:
-    "Product of a list using `reduce` and `mul`."
-    raise NotImplementedError("Need to include this file from past assignment.")
+    """Compute the product of a list.
+
+    Uses `reduce` with the `mul` function.
+
+    Args:
+        ls (Iterable[float]): A list (or iterable) of numbers.
+
+    Returns:
+        float: The product of all elements in ls.
+    """
+    reducer = reduce(fn = mul, start = 1.0)
+    return reducer(ls)

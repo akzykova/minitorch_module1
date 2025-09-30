@@ -31,11 +31,21 @@ class Module:
 
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        def set_to_train(current_module: Module):
+            current_module.training = True
+            for des_module in current_module.modules():
+                set_to_train(des_module)
+            
+        set_to_train(self)
 
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        def set_to_eval(current_module: Module):
+            current_module.training = False
+            for des_module in current_module.modules():
+                set_to_eval(des_module)
+            
+        set_to_eval(self)
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """
@@ -45,11 +55,39 @@ class Module:
         Returns:
             The name and `Parameter` of each ancestor parameter.
         """
-        raise NotImplementedError("Need to include this file from past assignment.")
+        def get_params(current_module: Module, prefix: str = ""):
+            param_list = []
+
+            for param_name, param in current_module._parameters.items():
+                full_name = f"{prefix}{param_name}"
+                param_list.append((full_name, param))
+
+            for child_name, child_module in current_module._modules.items():
+                child_prefix = f"{prefix}{child_name}."
+                param_list.extend(get_params(child_module, child_prefix))
+                
+            return param_list
+        
+        return get_params(self)
 
     def parameters(self) -> Sequence[Parameter]:
-        "Enumerate over all the parameters of this module and its descendents."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        """Enumerate all parameters of this module and its descendants.
+
+        Returns:
+            Sequence[Parameter]: A list of all Parameter objects in the
+            module hierarchy.
+        """
+        def get_all_params(current_module: Module):
+            param_list = []
+            
+            param_list.extend(current_module._parameters.values())
+            
+            for child_module in current_module._modules.values():
+                param_list.extend(get_all_params(child_module))
+                
+            return param_list
+        
+        return get_all_params(self)
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """
